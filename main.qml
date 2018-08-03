@@ -7,12 +7,14 @@ import "views"
 
 Window {
     id: mainWindow
+    title: qsTr("Competition app")
 
     visible: true
     minimumWidth: Screen.width/2
     maximumWidth: Screen.width/2
-    minimumHeight: Screen.height/2
-    maximumHeight: Screen.height/2
+    minimumHeight: Screen.height/1.5
+    maximumHeight: Screen.height/1.5
+    modality: Qt.ApplicationModal
 
     ColumnLayout{
         anchors.fill: parent

@@ -1,3 +1,4 @@
+#include <QtQml>
 #include <QDebug>
 #include <QTextCodec>
 #include <QGuiApplication>
@@ -24,10 +25,15 @@ int main(int argc, char *argv[])
     if (!nsSettings::Settings::instance()->isValid())
         nsSettings::Settings::instance()->createDefaultFile();
 
-    __print;
-    Manager* m = new Manager();
+//    __print;
+//    Manager* m = new Manager();
 
     QGuiApplication app(argc, argv);
+    QCoreApplication::setOrganizationName("awesome");
+    // DK robotics competition
+    QCoreApplication::setApplicationName("dkrc");
+
+    qmlRegisterType<Manager>("awesome.dkrc.app", 1, 0, "Manager");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

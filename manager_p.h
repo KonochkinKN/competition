@@ -21,11 +21,14 @@ public:
     bool makeGroups();
 
 private:
+    int mGroupsPlayed;
     QStringList mNames;
     QStringList mRobots;
     QStringList mClasses;
+    QList<int> mChampions;
     QStringList mUniqClasses;
     QList<QList<int>> mGroups;
+    QList<int> mArenasForGroups;
 
     Manager* q_ptr;
     QThread* pThread;

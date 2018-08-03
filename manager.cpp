@@ -24,8 +24,80 @@ Manager::~Manager()
     d_ptr->deleteLater();
 }
 
+QStringList Manager::getGroup(const int& arena)
+{
+    Q_D(Manager);
+    __print << d->mGroupsPlayed;
+    if (d->mGroupsPlayed < 0) return QStringList();
+    if (d->mGroupsPlayed >= d->mGroups.size()) return QStringList();
+
+    QStringList names;
+    d->mArenasForGroups[d->mGroupsPlayed] = arena; // save arena number
+    foreach (int index, d->mGroups.at(d->mGroupsPlayed))
+        names.append(d->mNames.at(index));
+
+    d->mGroupsPlayed++;
+    return names;
+}
+
+void Manager::setFinished(const int &arena)
+{
+    __print << arena;
+    Q_D(Manager);
+    if (!d->mArenasForGroups.contains(arena))
+    {
+        __print << "Invalid arena number";
+        return;
+    }
+    d->mArenasForGroups[d->mArenasForGroups.indexOf(arena)] = 0;
+}
+
+void Manager::setPlayer(const int &arena, const int &player, const bool &check)
+{
+    __print << arena << player << check;
+    Q_D(Manager);
+    if (!d->mArenasForGroups.contains(arena))
+    {
+        __print << "Invalid arena number";
+        return;
+    }
+    int arenaInd = d->mArenasForGroups.indexOf(arena);
+
+    if (arenaInd >= d->mGroups.size())
+    {
+        __print << "Invalid arena index";
+        return;
+    }
+
+    QList<int> players = d->mGroups.at(d->mArenasForGroups.indexOf(arena));
+
+    if (player >= players.size())
+    {
+        __print << "Invalid player number";
+        return;
+    }
+
+    int playerNum = players.at(player);
+
+    if (check && !d->mChampions.contains(playerNum))
+    {
+        d->mChampions.append(playerNum);
+    }
+    else if (!check && d->mChampions.contains(playerNum))
+    {
+        d->mChampions.removeAll(playerNum);
+    }
+    else __print << "Something goes wrong";
+
+    foreach (int ind, d->mChampions)
+    {
+        qDebug() << d->mNames.at(ind);
+    }
+}
+
 ManagerPrivate::ManagerPrivate(QObject *parent)
     : QObject(parent)
+    , mGroupsPlayed(-1)
     , pThread(new QThread())
 {
     this->moveToThread(pThread);
@@ -117,8 +189,10 @@ bool ManagerPrivate::makeGroups()
         return false;
     }
 
+    mGroupsPlayed = -1;
     mGroups.clear();
     mUniqClasses.clear();
+    mArenasForGroups.clear();
     QMap <QString, QList<int>> counts;
     for (int i = 0; i < nPlayers; i++)
     {
@@ -157,10 +231,12 @@ bool ManagerPrivate::makeGroups()
     });
 
     for(int i = 0; i < nGroup; i++)
-    {
+    {        
+        mArenasForGroups.append(0);
         qDebug() << QString("Arena #%1:").arg(i+1) << mGroups[i];
     }
 
+    mGroupsPlayed = 0;
     return true;
 }
 
