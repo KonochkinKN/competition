@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>ArenaImage.qml</file>
+        <file>ArenaComponent.qml</file>
+        <file>views/CurrentViewComponent.qml</file>
+        <file>views/GeneralViewComponent.qml</file>
+        <file>views/ResultsViewComponent.qml</file>
+        <file>views/SettingsViewComponent.qml</file>
+    </qresource>
+</RCC>
