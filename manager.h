@@ -20,6 +20,7 @@ public:
                                const bool& check);
 
 signals:
+    void noGroupsAvailable();
 
 private:
     Q_DECLARE_PRIVATE(Manager)

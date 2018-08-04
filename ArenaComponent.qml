@@ -10,12 +10,11 @@ Item {
     property int number: 0
 
     property bool isOccupied: false
+    property bool startMatchAvailable: true
 
     signal started();
     signal finished();
     signal playerChecked(int player, bool checked);
-
-    // TODO: make normal view
 
     ColumnLayout{
         anchors.fill: parent
@@ -33,11 +32,24 @@ Item {
             width: parent.width
             height: parent.height - img.size
 
+            Button{
+                id: btn
+                text: isOccupied ? qsTr("End match") : qsTr("Start")
+                Layout.preferredWidth: img.size
+                enabled: isOccupied || startMatchAvailable
+                Layout.alignment: Qt.AlignHCenter
+                onClicked:{
+                    isOccupied = !isOccupied
+                    if(isOccupied) started()
+                    else finished()
+                }
+            }
+
             Repeater{
                 id: rep
                 visible: isOccupied
                 model: (players == undefined) ? 0 : players.length
-                anchors.fill: parent
+//                anchors.fill: parent
 
                 delegate: Text{
                     property bool checked: false
@@ -60,19 +72,6 @@ Item {
                             playerChecked(index, parent.checked)
                         }
                     }
-                }
-            }
-
-            Button{
-                id: btn
-                text: isOccupied ? qsTr("End match") : qsTr("start")
-//                anchors.top: rep.bottom
-//                width: img.width
-                Layout.alignment: Qt.AlignHCenter
-                onClicked:{
-                    isOccupied = !isOccupied
-                    if(isOccupied) started()
-                    else finished()
                 }
             }
         }

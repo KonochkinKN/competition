@@ -7,62 +7,94 @@ import "../"
 Item {
     id: component
 
-    readonly property int arenaWidth: Math.floor(parseFloat(width)/5)
+    readonly property int numberOfArenas: app.numberOfArenas
+    readonly property int arenaWidth: Math.floor(parseFloat(width)/(numberOfArenas+2))
+    property bool groupsAvailable: true
 
-    Manager{ id: manager;}
+    onNumberOfArenasChanged: console.log(numberOfArenas)
 
-    RowLayout{
+    App{ id: app;}
+
+    Manager{
+        id: manager;
+        onNoGroupsAvailable: groupsAvailable = false
+    }
+
+    ColumnLayout{
         anchors.fill: parent
-        spacing: arenaWidth/10
-
-        ArenaComponent{
-            number: 1
-//            players: ["Petrov", "Ivanov"]
-            Layout.topMargin: 20
-            Layout.leftMargin: arenaWidth/5
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: arenaWidth
-            onWidthChanged: console.log(width, parent.width)
-
-            onStarted: players = manager.getGroup(1);
-            onPlayerChecked: manager.setPlayer(1, player, checked);
-            onFinished: manager.setFinished(1);
+        Text{
+            text: groupsAvailable ? "" : qsTr("No more groups in queue")
+            Layout.preferredWidth: parent.width
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: 20
         }
 
-        ArenaComponent{
-            number: 2
-//            players: ["Petrov", "Ivanov", "Sidorov"]
-            Layout.topMargin: 20
+        RowLayout{
+            Layout.preferredWidth: parent.width
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: arenaWidth
+            spacing: arenaWidth/10
 
-            onStarted: players = manager.getGroup(2);
-            onPlayerChecked: manager.setPlayer(2, player, checked);
-            onFinished: manager.setFinished(2);
-        }
+            Repeater{
+                model: numberOfArenas
 
-        ArenaComponent{
-            number: 3
-//            players: ["Petrov", "Ivanov"]
-            Layout.topMargin: 20
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: arenaWidth
+                delegate:
+                    ArenaComponent{
+                        number: index+1
+                        Layout.leftMargin: arenaWidth/5
+                        Layout.preferredHeight: parent.height
+                        Layout.preferredWidth: arenaWidth
 
-            onStarted: players = manager.getGroup(3);
-            onPlayerChecked: manager.setPlayer(3, player, checked);
-            onFinished: manager.setFinished(3);
-        }
+                        onStarted: players = manager.getGroup(number);
+                        onPlayerChecked: manager.setPlayer(number, player, checked);
+                        onFinished: manager.setFinished(number);
+                        startMatchAvailable: groupsAvailable
+                    }
+            }
 
-        ArenaComponent{
-            number: 4
-//            players: ["Petrov", "Ivanov"]
-            Layout.topMargin: 20
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: arenaWidth
+//            ArenaComponent{
+//                number: 1
+//                Layout.leftMargin: arenaWidth/5
+//                Layout.preferredHeight: parent.height
+//                Layout.preferredWidth: arenaWidth
 
-            onStarted: players = manager.getGroup(4);
-            onPlayerChecked: manager.setPlayer(4, player, checked);
-            onFinished: manager.setFinished(4);
+//                onStarted: players = manager.getGroup(1);
+//                onPlayerChecked: manager.setPlayer(1, player, checked);
+//                onFinished: manager.setFinished(1);
+//                startMatchAvailable: groupsAvailable
+//            }
+
+//            ArenaComponent{
+//                number: 2
+//                Layout.preferredHeight: parent.height
+//                Layout.preferredWidth: arenaWidth
+
+//                onStarted: players = manager.getGroup(2);
+//                onPlayerChecked: manager.setPlayer(2, player, checked);
+//                onFinished: manager.setFinished(2);
+//                startMatchAvailable: groupsAvailable
+//            }
+
+//            ArenaComponent{
+//                number: 3
+//                Layout.preferredHeight: parent.height
+//                Layout.preferredWidth: arenaWidth
+
+//                onStarted: players = manager.getGroup(3);
+//                onPlayerChecked: manager.setPlayer(3, player, checked);
+//                onFinished: manager.setFinished(3);
+//                startMatchAvailable: groupsAvailable
+//            }
+
+//            ArenaComponent{
+//                number: 4
+//                Layout.preferredHeight: parent.height
+//                Layout.preferredWidth: arenaWidth
+
+//                onStarted: players = manager.getGroup(4);
+//                onPlayerChecked: manager.setPlayer(4, player, checked);
+//                onFinished: manager.setFinished(4);
+//                startMatchAvailable: groupsAvailable
+//            }
         }
     }
 }

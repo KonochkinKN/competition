@@ -15,7 +15,8 @@ RESOURCES += qml.qrc
 HEADERS += \
     settings.h \
     manager.h \
-    manager_p.h
+    manager_p.h \
+    application.h
 
 DISTFILES += \
     main.qml \

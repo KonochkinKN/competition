@@ -37,6 +37,8 @@ QStringList Manager::getGroup(const int& arena)
         names.append(d->mNames.at(index));
 
     d->mGroupsPlayed++;
+    if (d->mGroupsPlayed >= d->mGroups.size()) emit noGroupsAvailable();
+
     return names;
 }
 

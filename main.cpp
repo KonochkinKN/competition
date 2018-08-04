@@ -6,6 +6,7 @@
 
 #include "manager.h"
 #include "settings.h"
+#include "application.h"
 
 #include <clocale>
 
@@ -34,6 +35,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("dkrc");
 
     qmlRegisterType<Manager>("awesome.dkrc.app", 1, 0, "Manager");
+    qmlRegisterType<Application>("awesome.dkrc.app", 1, 0, "App");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
